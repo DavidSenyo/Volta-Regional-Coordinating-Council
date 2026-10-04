@@ -1,0 +1,11 @@
+
+body::before {
+  content: "(c)2026 VRCC by D.A. Analytics";
+  position: fixed;
+  top: 40%;
+  left: 25%;
+  font-size: 5em;
+  color: rgba(200, 200, 200, 0.2);
+  transform: rotate(-30deg);
+  z-index: 9999;
+}

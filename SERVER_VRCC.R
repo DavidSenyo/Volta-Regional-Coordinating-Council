@@ -1,58 +1,143 @@
+
 # ===============================
 # SERVER_VRCC.R
 # ===============================
 
+# Make the standalone HTML map fit below its heading on a phone.
+make_download_map_mobile <- function(map) {
+                                           map$width <- "100%"
+                                           map$height <- "100vh"
+  
+  map <- htmlwidgets::prependContent(
+    map,
+    htmltools::tags$head(
+               htmltools::tags$meta(
+                                    name = "viewport",
+                                    content = "width=device-width, initial-scale=1"
+                                   ),
+      htmltools::tags$style(htmltools::HTML("
+        html, body {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+        }
+
+        .leaflet.html-widget {
+          width: 100% !important;
+          height: calc(100vh - var(--vr-header-height, 65px)) !important;
+          height: calc(100dvh - var(--vr-header-height, 65px)) !important;
+          min-height: 0 !important;
+        }
+
+        .leaflet-popup-content-wrapper {
+          max-width: calc(100vw - 45px);
+        }
+
+        .leaflet-popup-content {
+          max-width: calc(100vw - 85px);
+          overflow-wrap: anywhere;
+        }
+
+        .leaflet-popup-content img,
+        .leaflet-popup-content video {
+          max-width: 100%;
+          height: auto;
+        }
+      "))
+    )
+  )
+  
+  map <- htmlwidgets::onRender(
+    map,
+    "
+    function(el, x) {
+      var leafletMap = this;
+
+      function resizeMap() {
+        var header = document.querySelector('.vr-header');
+        var headerHeight = header
+          ? Math.ceil(header.getBoundingClientRect().height)
+          : 65;
+
+        document.documentElement.style.setProperty(
+          '--vr-header-height',
+          headerHeight + 'px'
+        );
+
+        setTimeout(function() {
+          leafletMap.invalidateSize();
+        }, 50);
+      }
+
+      setTimeout(resizeMap, 300);
+      window.addEventListener('resize', resizeMap);
+      window.addEventListener('orientationchange', function() {
+        setTimeout(resizeMap, 300);
+      });
+    }
+    "
+  )
+  
+  map
+}
+
 server <- function(input, output, session) {
   
   # ============================================================
-  # Shared map functions
+  # SHARED MAP FUNCTIONS
   # ============================================================
-  
-  getColor <- function(status) {
-    dplyr::case_when(
-      status == "Completed" ~ "green",
-      status == "Planned"   ~ "orange",
-      status == "On-going"  ~ "blue",
-      TRUE                  ~ "gray"
-    )
-  }
   
   project_marker_icons <- function(pts) {
     icon_by_type <- c(
-      "Infrastructure"      = "home",
-      "The Big Push"        = "wrench",
-      "24hr Eco Market"     = "flag",
-      "Infrastructure-Road" = "road",
-      "New Project Type 5"  = "plus",
-      "New Project Type 6"  = "leaf"
-    )
+                      "Infrastructure"      = "home",
+                      "The Big Push"        = "wrench",
+                      "24hr Eco Market"     = "flag",
+                      "Infrastructure-Road" = "road",
+                      "New Project Type 5"  = "plus",
+                      "New Project Type 6"  = "leaf"
+                     )
+    
     
     library_by_type <- c(
-      "Infrastructure"      = "glyphicon",
-      "The Big Push"        = "glyphicon",
-      "24hr Eco Market"     = "fa",
-      "Infrastructure-Road" = "glyphicon",
-      "New Project Type 5"  = "glyphicon",
-      "New Project Type 6"  = "glyphicon"
-    )
+                        "Infrastructure"      = "glyphicon",
+                        "The Big Push"        = "glyphicon",
+                        "24hr Eco Market"     = "fa",
+                        "Infrastructure-Road" = "glyphicon",
+                        "New Project Type 5"  = "glyphicon",
+                        "New Project Type 6"  = "glyphicon"
+                        )
+    
+    marker_color_by_type <- c(
+                              "Infrastructure"      = "blue",
+                              "The Big Push"        = "orange",
+                              "24hr Eco Market"     = "green",
+                              "Infrastructure-Road" = "purple",
+                              "New Project Type 5"  = "red",
+                              "New Project Type 6"  = "cadetblue"
+                             )
     
     project_type <- as.character(pts$Project_Type)
     
     icons <- unname(icon_by_type[project_type])
     libraries <- unname(library_by_type[project_type])
+    marker_colors <- unname(marker_color_by_type[project_type])
     
+    # Defaults for types not listed above.
     icons[is.na(icons)] <- "home"
     libraries[is.na(libraries)] <- "glyphicon"
+    marker_colors[is.na(marker_colors)] <- "gray"
     
     leaflet::awesomeIcons(
       icon = icons,
       library = libraries,
       iconColor = "white",
-      markerColor = getColor(as.character(pts$Status))
+      markerColor = marker_colors
     )
   }
   
-  # Escape spreadsheet text before placing it in popup HTML.
+  # Escape spreadsheet text before adding it to popup HTML.
   popup_text <- function(value) {
     if (length(value) == 0 || is.na(value)) {
       return("—")
@@ -93,14 +178,13 @@ server <- function(input, output, session) {
     )
   }
   
-  # Both the app and the downloaded HTML call this function.
+  # Used by the live maps and both HTML downloads.
   build_project_map <- function(district_polygons, projects) {
-    req(nrow(district_polygons) > 0)
+    shiny::req(nrow(district_polygons) > 0)
     
     center <- sf::st_centroid(
       sf::st_union(district_polygons)
     )
-    
     coordinates <- sf::st_coordinates(center)
     
     map <- leaflet::leaflet(
@@ -142,7 +226,7 @@ server <- function(input, output, session) {
     map
   }
   
-  # Add the gallery behavior, heading, and styling to a download.
+  # Add the media behavior, heading, and watermark to an export.
   make_downloadable_map <- function(map, heading_text) {
     map <- htmlwidgets::onRender(
       map,
@@ -169,12 +253,6 @@ server <- function(input, output, session) {
         font-weight: bold;
         color: #1e1e4c;
         border-bottom: 2px solid #1e1e4c;
-      }
-
-      .leaflet.html-widget {
-        width: 100% !important;
-        height: calc(100vh - 65px) !important;
-        min-height: 450px;
       }
 
       .vr-watermark {
@@ -206,67 +284,55 @@ server <- function(input, output, session) {
       )
     )
     
-    map <- htmlwidgets::appendContent(
+    htmlwidgets::appendContent(
       map,
       htmltools::tags$div(
         class = "vr-watermark",
         "(c) 2026 Volta Region. Creator: D.S.A (for Regional Minister)"
       )
     )
-    
-    map
   }
   
   # ============================================================
-  # TAB 1: Projects Map
+  # TAB 1: PROJECTS MAP
   # ============================================================
   
-  observeEvent(input$districts, {
-    shiny::updateCheckboxGroupInput(
-      session,
-      inputId = "status_filter",
-      selected = "On-going"
-    )
-  })
-  
-  filtered_data <- reactive({
-    req(input$districts)
+  filtered_data <- shiny::reactive({
+    shiny::req(input$districts)
     
     volta_data %>%
       dplyr::filter(NAME_2 == input$districts)
   })
   
-  filtered_projects <- reactive({
-    req(input$districts)
+  filtered_projects <- shiny::reactive({
+    shiny::req(input$districts)
     
     pts <- vrcc_projects_sf %>%
       dplyr::filter(District == input$districts)
     
-    if (
-      is.null(input$status_filter) ||
-      length(input$status_filter) == 0
-    ) {
-      return(pts[0, ])
-    }
-    
-    pts <- pts %>%
-      dplyr::filter(Status %in% input$status_filter)
-    
-    if (
-      is.null(input$type_filter) ||
-      length(input$type_filter) == 0
-    ) {
+    if (is.null(input$status_filter) ||
+        length(input$status_filter) == 0 ||
+        is.null(input$type_filter) ||
+        length(input$type_filter) == 0) {
       return(pts[0, ])
     }
     
     pts %>%
-      dplyr::filter(Project_Type %in% input$type_filter)
+      dplyr::filter(
+        Status %in% input$status_filter,
+        Project_Type %in% input$type_filter
+      )
   })
   
   output$vr_map <- leaflet::renderLeaflet({
+    df <- filtered_data()
+    pts <- filtered_projects()
+    
+    shiny::req(nrow(df) > 0)
+    
     build_project_map(
-      district_polygons = filtered_data(),
-      projects = filtered_projects()
+      district_polygons = df,
+      projects = pts
     )
   })
   
@@ -297,32 +363,26 @@ server <- function(input, output, session) {
       df <- filtered_data()
       pts <- filtered_projects()
       
-      req(nrow(df) > 0)
+      shiny::req(nrow(df) > 0)
       
-      district_name <- paste(
-        input$districts,
-        collapse = ", "
-      )
+      district_name <- paste(input$districts, collapse = ", ")
       
       status_text <- if (length(input$status_filter) > 0) {
         paste(input$status_filter, collapse = ", ")
       } else {
-        "No status selected"
+        "None selected"
       }
       
       type_text <- if (length(input$type_filter) > 0) {
         paste(input$type_filter, collapse = ", ")
       } else {
-        "No type selected"
+        "None selected"
       }
       
       heading_text <- paste0(
-        "Projects in Volta Region - ",
-        district_name,
-        " | Status: ",
-        status_text,
-        " | Type: ",
-        type_text
+        "Projects in Volta Region - ", district_name,
+        " | Status: ", status_text,
+        " | Type: ", type_text
       )
       
       map <- build_project_map(
@@ -330,19 +390,20 @@ server <- function(input, output, session) {
         projects = pts
       )
       
-      map <- make_downloadable_map(
+      export_map <- make_downloadable_map(
         map,
         heading_text
       )
       
+      export_map <- make_download_map_mobile(
+        export_map
+      )
+      
       htmlwidgets::saveWidget(
-        widget = map,
+        widget = export_map,
         file = file,
         selfcontained = TRUE,
-        title = paste(
-          "VRCC Projects -",
-          district_name
-        )
+        title = paste("VRCC Projects -", district_name)
       )
     },
     
@@ -350,46 +411,41 @@ server <- function(input, output, session) {
   )
   
   # ============================================================
-  # TAB 2: Ho Municipal
+  # TAB 2: HO MUNICIPAL
   # ============================================================
   
-  fltd_data <- reactive({
+  fltd_data <- shiny::reactive({
     volta_data %>%
       dplyr::filter(NAME_2 == "Ho Municipal")
   })
   
-  fltd_projects <- reactive({
-    req(input$hm_status_filter)
-    
-    pts <- vrcc_projects_sf %>%
+  fltd_projects <- shiny::reactive({
+    pts2 <- vrcc_projects_sf %>%
       dplyr::filter(District == "Ho Municipal")
     
-    if (input$hm_status_filter != "All") {
-      pts <- pts %>%
-        dplyr::filter(
-          trimws(as.character(Status)) ==
-            input$hm_status_filter
-        )
+    if (is.null(input$hm_status_filter) ||
+        length(input$hm_status_filter) == 0 ||
+        is.null(input$hm_type_filter) ||
+        length(input$hm_type_filter) == 0) {
+      return(pts2[0, ])
     }
     
-    # Use the Ho Municipal tab's own Project Type control.
-    if (
-      is.null(input$hm_type_filter) ||
-      length(input$hm_type_filter) == 0
-    ) {
-      return(pts[0, ])
-    }
-    
-    pts %>%
+    pts2 %>%
       dplyr::filter(
+        Status %in% input$hm_status_filter,
         Project_Type %in% input$hm_type_filter
       )
   })
   
   output$hm_map <- leaflet::renderLeaflet({
+    df <- fltd_data()
+    pts2 <- fltd_projects()
+    
+    shiny::req(nrow(df) > 0)
+    
     build_project_map(
-      district_polygons = fltd_data(),
-      projects = fltd_projects()
+      district_polygons = df,
+      projects = pts2
     )
   })
   
@@ -404,30 +460,44 @@ server <- function(input, output, session) {
     
     content = function(file) {
       df <- fltd_data()
-      pts <- fltd_projects()
+      pts2 <- fltd_projects()
       
-      req(nrow(df) > 0)
+      shiny::req(nrow(df) > 0)
+      
+      status_text <- if (length(input$hm_status_filter) > 0) {
+        paste(input$hm_status_filter, collapse = ", ")
+      } else {
+        "None selected"
+      }
+      
+      type_text <- if (length(input$hm_type_filter) > 0) {
+        paste(input$hm_type_filter, collapse = ", ")
+      } else {
+        "None selected"
+      }
       
       heading_text <- paste0(
         "Projects in Ho Municipal",
-        " | Status: ",
-        input$hm_status_filter,
-        " | Type: ",
-        input$hm_type_filter
+        " | Status: ", status_text,
+        " | Type: ", type_text
       )
       
       map <- build_project_map(
         district_polygons = df,
-        projects = pts
+        projects = pts2
       )
       
-      map <- make_downloadable_map(
+      export_map <- make_downloadable_map(
         map,
         heading_text
       )
       
+      export_map <- make_download_map_mobile(
+        export_map
+      )
+      
       htmlwidgets::saveWidget(
-        widget = map,
+        widget = export_map,
         file = file,
         selfcontained = TRUE,
         title = "VRCC Projects - Ho Municipal"
@@ -436,251 +506,7 @@ server <- function(input, output, session) {
     
     contentType = "text/html"
   )
-  
-  # ============================================================
-  # TAB 3: Overview
-  # ============================================================
-  
-  overview_filtered <- reactive({
-    req(
-      input$overview_region,
-      input$overview_gender,
-      input$overview_age,
-      input$overview_purchases
-    )
-    
-    data <- sample_df %>%
-      dplyr::filter(
-        !is.na(Age),
-        !is.na(Previous_Purchases),
-        Age >= input$overview_age[1],
-        Age <= input$overview_age[2],
-        Previous_Purchases >= input$overview_purchases[1],
-        Previous_Purchases <= input$overview_purchases[2]
-      )
-    
-    if (input$overview_region != "All") {
-      data <- data %>%
-        dplyr::filter(
-          Region == input$overview_region
-        )
-    }
-    
-    if (input$overview_gender != "All") {
-      data <- data %>%
-        dplyr::filter(
-          Gender == input$overview_gender
-        )
-    }
-    
-    data
-  })
-  
-  output$overview_total_customers <-
-    shinydashboard::renderValueBox({
-      shinydashboard::valueBox(
-        value = format(
-          nrow(overview_filtered()),
-          big.mark = ","
-        ),
-        subtitle = "Total Customers",
-        icon = shiny::icon("users"),
-        color = "navy"
-      )
-    })
-  
-  output$overview_conversion_rate <-
-    shinydashboard::renderValueBox({
-      data <- overview_filtered()
-      
-      rate <- if (
-        nrow(data) == 0 ||
-        all(is.na(data$Purchase_Made))
-      ) {
-        NA_real_
-      } else {
-        mean(data$Purchase_Made, na.rm = TRUE)
-      }
-      
-      shinydashboard::valueBox(
-        value = if (is.na(rate)) {
-          "N/A"
-        } else {
-          paste0(round(rate * 100, 1), "%")
-        },
-        subtitle = "Conversion Rate",
-        icon = shiny::icon("check"),
-        color = "yellow"
-      )
-    })
-  
-  output$overview_total_spent <-
-    shinydashboard::renderValueBox({
-      total <- sum(
-        overview_filtered()$Amount_Spent,
-        na.rm = TRUE
-      )
-      
-      shinydashboard::valueBox(
-        value = paste0(
-          "$",
-          format(round(total), big.mark = ",")
-        ),
-        subtitle = "Revenue",
-        icon = shiny::icon("dollar-sign"),
-        color = "purple"
-      )
-    })
-  
-  output$overview_conversion_plot <- plotly::renderPlotly({
-    data <- overview_filtered() %>%
-      dplyr::filter(
-        !is.na(Campaign_Exposure),
-        !is.na(Purchase_Made)
-      ) %>%
-      dplyr::group_by(Campaign_Exposure) %>%
-      dplyr::summarise(
-        Conversion = mean(Purchase_Made),
-        .groups = "drop"
-      )
-    
-    shiny::validate(
-      shiny::need(
-        nrow(data) > 0,
-        "No campaign data for these filters."
-      )
-    )
-    
-    chart <- ggplot2::ggplot(
-      data,
-      ggplot2::aes(
-        x = Campaign_Exposure,
-        y = Conversion,
-        fill = Campaign_Exposure
-      )
-    ) +
-      ggplot2::geom_col() +
-      ggplot2::scale_y_continuous(
-        labels = function(x) {
-          paste0(round(x * 100), "%")
-        }
-      ) +
-      ggplot2::labs(
-        x = "Campaign",
-        y = "Conversion Rate"
-      ) +
-      ggplot2::theme_minimal() +
-      ggplot2::theme(
-        legend.position = "none"
-      )
-    
-    plotly::ggplotly(chart)
-  })
-  
-  output$overview_region_spend <- plotly::renderPlotly({
-    data <- overview_filtered() %>%
-      dplyr::filter(!is.na(Region)) %>%
-      dplyr::group_by(Region) %>%
-      dplyr::summarise(
-        TotalSpent = sum(
-          Amount_Spent,
-          na.rm = TRUE
-        ),
-        .groups = "drop"
-      )
-    
-    shiny::validate(
-      shiny::need(
-        nrow(data) > 0,
-        "No regional data for these filters."
-      )
-    )
-    
-    chart <- ggplot2::ggplot(
-      data,
-      ggplot2::aes(
-        x = Region,
-        y = TotalSpent,
-        fill = Region
-      )
-    ) +
-      ggplot2::geom_col() +
-      ggplot2::labs(
-        x = "Region",
-        y = "Total Amount Spent"
-      ) +
-      ggplot2::theme_minimal() +
-      ggplot2::theme(
-        legend.position = "none"
-      )
-    
-    plotly::ggplotly(chart)
-  })
-  
-  output$overview_scatter_plot <- plotly::renderPlotly({
-    data <- overview_filtered() %>%
-      dplyr::filter(
-        !is.na(Income),
-        !is.na(Amount_Spent)
-      )
-    
-    shiny::validate(
-      shiny::need(
-        nrow(data) > 0,
-        "No income and spending data for these filters."
-      )
-    )
-    
-    chart <- ggplot2::ggplot(
-      data,
-      ggplot2::aes(
-        x = Income,
-        y = Amount_Spent,
-        color = factor(Purchase_Made)
-      )
-    ) +
-      ggplot2::geom_point(alpha = 0.6) +
-      ggplot2::labs(
-        x = "Income",
-        y = "Amount Spent",
-        color = "Purchased"
-      ) +
-      ggplot2::theme_minimal()
-    
-    plotly::ggplotly(chart)
-  })
-  
-  output$overview_download_report <- shiny::downloadHandler(
-    filename = function() {
-      paste0(
-        "overview_report_",
-        Sys.Date(),
-        ".html"
-      )
-    },
-    
-    content = function(file) {
-      report_source <- "overview_report.Rmd"
-      
-      if (!file.exists(report_source)) {
-        stop(
-          "overview_report.Rmd is missing from the app directory."
-        )
-      }
-      
-      rmarkdown::render(
-        input = report_source,
-        output_file = file,
-        params = list(
-          data = overview_filtered(),
-          name = "David K. Ackuaku"
-        ),
-        envir = new.env(parent = globalenv()),
-        quiet = TRUE
-      )
-    },
-    
-    contentType = "text/html"
-  )
 }
+
+
 

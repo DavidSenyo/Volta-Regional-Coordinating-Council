@@ -288,7 +288,7 @@ server <- function(input, output, session) {
       map,
       htmltools::tags$div(
         class = "vr-watermark",
-        "(c) 2026 Volta Region. Creator: D.S.A (for Regional Minister)"
+        "(c) 2026 Volta Regional Coordinating Council. By D.A Analytics (senyoackuaku@gmail.com)"
       )
     )
   }

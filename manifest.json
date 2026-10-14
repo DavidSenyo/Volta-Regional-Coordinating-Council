@@ -3273,6 +3273,45 @@
         "RemoteSha": "2.4.2"
       }
     },
+    "openxlsx": {
+      "Source": "CRAN",
+      "Repository": "https://packagemanager.posit.co/cran/latest",
+      "description": {
+        "Type": "Package",
+        "Package": "openxlsx",
+        "Title": "Read, Write and Edit xlsx Files",
+        "Version": "4.2.9",
+        "Authors@R": "\n    c(person(given = \"Philipp\",\n             family = \"Schauberger\",\n             role = \"aut\",\n             email = \"philipp@schauberger.co.at\"),\n      person(given = \"Alexander\",\n             family = \"Walker\",\n             role = \"aut\",\n             email = \"Alexander.Walker1989@gmail.com\"),\n      person(given = \"Luca\",\n             family = \"Braglia\",\n             role = \"ctb\"),\n      person(given = \"Joshua\",\n             family = \"Sturm\",\n             role = \"ctb\"),\n      person(given = \"Jan Marvin\",\n             family = \"Garbuszus\",\n             role = c(\"ctb\", \"cre\"),\n             email = \"jan.garbuszus@ruhr-uni-bochum.de\"),\n      person(given = \"Jordan Mark\",\n             family = \"Barbone\",\n             role = \"ctb\",\n             email = \"jmbarbone@gmail.com\",\n             comment = c(ORCID = \"0000-0001-9788-3628\")),\n      person(given = \"David\",\n             family = \"Zimmermann\",\n             role = \"ctb\",\n             email = \"david_j_zimmermann@hotmail.com\"),\n      person(given = \"Reinhold\",\n             family = \"Kainhofer\",\n             role = \"ctb\",\n             email = \"reinhold@kainhofer.com\"))",
+        "Description": "Simplifies the creation of Excel .xlsx files by providing a\n    high level interface to writing, styling and editing worksheets.\n    Through the use of 'Rcpp', read/write times are comparable to the\n    'xlsx' and 'XLConnect' packages with the added benefit of removing the\n    dependency on Java.",
+        "License": "MIT + file LICENSE",
+        "URL": "https://ycphs.github.io/openxlsx/index.html,\nhttps://github.com/ycphs/openxlsx",
+        "BugReports": "https://github.com/ycphs/openxlsx/issues",
+        "Depends": "R (>= 3.3.0)",
+        "Imports": "grDevices, methods, Rcpp, stats, stringi, utils, zip",
+        "Suggests": "curl, formula.tools, ggplot2, jpeg, knitr, rmarkdown,\nsurvival, testthat",
+        "LinkingTo": "Rcpp",
+        "VignetteBuilder": "knitr",
+        "Encoding": "UTF-8",
+        "Language": "en-US",
+        "Collate": "'CommentClass.R' 'HyperlinkClass.R' 'RcppExports.R'\n'class_definitions.R' 'StyleClass.R' 'WorkbookClass.R'\n'asserts.R' 'baseXML.R' 'borderFunctions.R' 'build_workbook.R'\n'chartsheet_class.R' 'conditional_formatting.R'\n'data-fontSizeLookupTables.R' 'helperFunctions.R'\n'loadWorkbook.R' 'onUnload.R' 'openXL.R' 'openxlsx-package.R'\n'openxlsx.R' 'openxlsxCoerce.R' 'readWorkbook.R'\n'setWindowSize.R' 'sheet_data_class.R' 'utils.R'\n'workbook_column_widths.R' 'workbook_read_workbook.R'\n'workbook_write_data.R' 'worksheet_class.R' 'wrappers.R'\n'writeData.R' 'writeDataTable.R' 'writexlsx.R' 'zzz.R'",
+        "LazyData": "true",
+        "Config/roxygen2/version": "8.1.0",
+        "NeedsCompilation": "yes",
+        "Packaged": "2026-09-02 06:32:31 UTC; janmarvingarbuszus",
+        "Author": "Philipp Schauberger [aut],\n  Alexander Walker [aut],\n  Luca Braglia [ctb],\n  Joshua Sturm [ctb],\n  Jan Marvin Garbuszus [ctb, cre],\n  Jordan Mark Barbone [ctb] (ORCID:\n    <https://orcid.org/0000-0001-9788-3628>),\n  David Zimmermann [ctb],\n  Reinhold Kainhofer [ctb]",
+        "Maintainer": "Jan Marvin Garbuszus <jan.garbuszus@ruhr-uni-bochum.de>",
+        "Repository": "RSPM",
+        "Date/Publication": "2026-09-02 09:30:02 UTC",
+        "Built": "R 4.6.0; x86_64-apple-darwin20; 2026-09-03 08:29:04 UTC; unix",
+        "RemoteType": "standard",
+        "RemoteRef": "openxlsx",
+        "RemotePkgRef": "openxlsx",
+        "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-apple-darwin20",
+        "RemoteSha": "4.2.9"
+      }
+    },
     "openxlsx2": {
       "Source": "CRAN",
       "Repository": "https://packagemanager.posit.co/cran/latest",
@@ -5754,6 +5793,36 @@
         "RemoteSha": "2.3.12"
       }
     },
+    "zip": {
+      "Source": "CRAN",
+      "Repository": "https://packagemanager.posit.co/cran/latest",
+      "description": {
+        "Package": "zip",
+        "Title": "Cross-Platform 'zip' Compression",
+        "Version": "3.0.2",
+        "Authors@R": "c(\n    person(\"Gábor\", \"Csárdi\", , \"csardi.gabor@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Kuba\", \"Podgórski\", role = \"ctb\"),\n    person(\"Rich\", \"Geldreich\", role = \"ctb\"),\n    person(\"Arm Limited\", role = c(\"ctb\", \"cph\"),\n           comment = \"bundled Mbed TLS crypto subset in src/mbedtls/ (Apache-2.0)\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\"))\n  )",
+        "Description": "Cross-Platform 'zip' Compression Library. A replacement for\n    the 'zip' function, that does not require any additional external\n    tools on any platform.",
+        "License": "MIT + file LICENSE",
+        "URL": "https://github.com/r-lib/zip, https://r-lib.github.io/zip/",
+        "BugReports": "https://github.com/r-lib/zip/issues",
+        "LinkingTo": "cli",
+        "Suggests": "callr, cli, curl, pillar, processx, R6, testthat, webfakes,\nwithr",
+        "Config/Needs/website": "tidyverse/tidytemplate",
+        "Config/testthat/edition": "3",
+        "Config/testthat/parallel": "true",
+        "Config/testthat/start-first": "large-files, http",
+        "Config/usethis/last-upkeep": "2025-05-07",
+        "Encoding": "UTF-8",
+        "Config/roxygen2/version": "8.0.0",
+        "NeedsCompilation": "yes",
+        "Packaged": "2026-07-31 21:25:10 UTC; gaborcsardi",
+        "Author": "Gábor Csárdi [aut, cre],\n  Kuba Podgórski [ctb],\n  Rich Geldreich [ctb],\n  Arm Limited [ctb, cph] (bundled Mbed TLS crypto subset in src/mbedtls/\n    (Apache-2.0)),\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
+        "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
+        "Repository": "RSPM",
+        "Date/Publication": "2026-08-04 18:00:02 UTC",
+        "Built": "R 4.6.0; x86_64-apple-darwin20; 2026-08-05 06:00:59 UTC; unix"
+      }
+    },
     "zoo": {
       "Source": "CRAN",
       "Repository": "https://packagemanager.posit.co/cran/latest",
@@ -5791,7 +5860,7 @@
   },
   "files": {
     ".Rprofile": {
-      "checksum": "3a996cf96693c7127c660d86220d4f1d"
+      "checksum": "e6c6f13e8d76ee5e1473d200479e736c"
     },
     "app_.R": {
       "checksum": "205bd7b79ec0eb471b1ba1b14e223bc0"
@@ -5803,7 +5872,7 @@
       "checksum": "6cff1dbcdfc3300263a5bdd5d5a2bde0"
     },
     "DataRead.R": {
-      "checksum": "4c74e2bc5923877a3d282c2b29413e0b"
+      "checksum": "69400046679f389e14728375b4a87a25"
     },
     "Extras/Presentation1.pptx": {
       "checksum": "8e066d36bd519f80626d13835cf0a369"
@@ -5959,16 +6028,16 @@
       "checksum": "f882fdc579df3479e706c93950739d6e"
     },
     "renv.lock": {
-      "checksum": "c78efbec0344e496eb078d620729422d"
+      "checksum": "9578e9d750414301b5f34ebba3c24de1"
     },
     "SERVER_VRCC.R": {
-      "checksum": "f82b0de889617adfec6d24161ad739f9"
+      "checksum": "5e49fef5dab33cd1c37aa43ffc23d982"
     },
     "Test.R": {
-      "checksum": "542db18df99cbd4404e712ccfe560798"
+      "checksum": "1e9313b3e04a095b05f3d59abd592966"
     },
     "UI_VRCC.R": {
-      "checksum": "bef287ba7e3f86f69acb837208af7e32"
+      "checksum": "a188e864d1b73151761ddb4ae236fc7a"
     },
     "Volta.R": {
       "checksum": "88395f639d18296d40a78c1497c012ba"
@@ -5977,19 +6046,25 @@
       "checksum": "9424ab6e59d71ad616320e36f623d0ed"
     },
     "VR_server.R": {
-      "checksum": "e583a75135a1a545b580c3849b547be7"
+      "checksum": "a4691ce64c03cb6a65109a3395885e50"
     },
     "VR_ui.R": {
-      "checksum": "6093bcd6cdf4c81e979ceaf4f7700d9e"
+      "checksum": "e3af9be24063c5d98e509aa3f90b2e6d"
     },
     "VRCC cost Proposal.pptx": {
       "checksum": "0b4fb2036978ba9b6a5d991b429ccd22"
+    },
+    "VRCC_Cost_Proposal_DA_Analytics_Final.pdf": {
+      "checksum": "84a81c8591d306e02198ce77b3c984ee"
+    },
+    "VRCC_Cost_Proposal_DA_Analytics_Final.pptx": {
+      "checksum": "424336f6b84efcad7777f471a4bddfae"
     },
     "vrcc.csv": {
       "checksum": "d009adad720732b4b078ad95e1e1c351"
     },
     "vrcc.xlsx": {
-      "checksum": "d242f15af5376c060d033d1ea92fb53b"
+      "checksum": "c7dbc20d86893107cc228ea647d4082b"
     },
     "watermark.css": {
       "checksum": "f8abc9a859deb051c327c221b098f46a"

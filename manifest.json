@@ -5860,7 +5860,7 @@
   },
   "files": {
     ".Rprofile": {
-      "checksum": "e6c6f13e8d76ee5e1473d200479e736c"
+      "checksum": "0d83380e16ef933de444d1d218618e12"
     },
     "app_.R": {
       "checksum": "205bd7b79ec0eb471b1ba1b14e223bc0"
@@ -5869,10 +5869,10 @@
       "checksum": "010f3f0f5b8914f5708a7ea0eb69b76e"
     },
     "DATAREAD_VRCC.R": {
-      "checksum": "6cff1dbcdfc3300263a5bdd5d5a2bde0"
+      "checksum": "7cdbdc7ce4a2c14c448d0c4053e9c2b2"
     },
     "DataRead.R": {
-      "checksum": "69400046679f389e14728375b4a87a25"
+      "checksum": "bb9f220a5aacd4b6a6c09b9a82ac3926"
     },
     "Extras/Presentation1.pptx": {
       "checksum": "8e066d36bd519f80626d13835cf0a369"
@@ -5967,77 +5967,38 @@
     "ghanashapefile": {
       "checksum": "969f2a1993f8469e5b73ff64ad4d6983"
     },
-    "marketing_campaign_data.csv": {
-      "checksum": "52c6f23d19976ebeb57b41ffd3f00c8d"
+    "Proposals/VRCC_Coordinate_Training_Proposal_DA_Analytics copy.pptx": {
+      "checksum": "6de96790c3f46007848ef287aa1c30c5"
     },
-    "overview_report.Rmd": {
-      "checksum": "11a250d39ab32ad4023783aa1a50af53"
+    "Proposals/VRCC_Coordinate_Training_Proposal_DA_Analytics.pdf": {
+      "checksum": "8d43030854062617ca69872e9dddf326"
     },
-    "Pictures/HM_BD01.jpeg": {
-      "checksum": "7f6fcfb6525cd9fb93d9bcb5c01f110e"
+    "Proposals/VRCC_Coordinate_Training_Proposal_DA_Analytics.pptx": {
+      "checksum": "6de96790c3f46007848ef287aa1c30c5"
     },
-    "Pictures/HM_BD02.jpeg": {
-      "checksum": "b638020d9751931fd9d377dbc737ae4e"
+    "Proposals/VRCC_Cost_Proposal_DA_Analytics_Final.pdf": {
+      "checksum": "84a81c8591d306e02198ce77b3c984ee"
     },
-    "Pictures/HM_BD03.jpeg": {
-      "checksum": "a3641a0491034afe498c410b9faa6741"
+    "Proposals/VRCC_Cost_Proposal_DA_Analytics_Final.pptx": {
+      "checksum": "424336f6b84efcad7777f471a4bddfae"
     },
-    "Pictures/HM_BD04.jpeg": {
-      "checksum": "ca85d2150e70fae7554d22a320202d68"
+    "Proposals/VRCC_Cost_Proposal_with_MMDA_Maps_DA_Analytics.pdf": {
+      "checksum": "5a38fac0004da207ea31b81d5cda21f2"
     },
-    "Pictures/HM_BDat01.jpg": {
-      "checksum": "f16cb43eef8342b6fc80bf659f55792b"
-    },
-    "Pictures/HM_BDat02.jpg": {
-      "checksum": "4b7bb8f2127b7ba2ddaa90ef59bb60b6"
-    },
-    "Pictures/HM_BDat03.jpg": {
-      "checksum": "57feba14afbbc23c72dd5d78ab9087e8"
-    },
-    "Pictures/HM_BDat04.jpg": {
-      "checksum": "2906b9c5b1973a241812bd27f4bd69f3"
-    },
-    "Pictures/HM_BDat05.jpg": {
-      "checksum": "ae07738c569592a7323813cac8efb764"
-    },
-    "Pictures/HM_EM01.jpeg": {
-      "checksum": "de628cccdb4a1477521cd02553a6df16"
-    },
-    "Pictures/HM_EM02.jpeg": {
-      "checksum": "d96c54d54f5f19279b51b16d99cc3ab1"
-    },
-    "Pictures/HM_EM03.jpeg": {
-      "checksum": "6e05260ea38d2babc401e0b5dc5c6e0b"
-    },
-    "Pictures/HM_EM04.jpeg": {
-      "checksum": "da6dcebc6dc0380a8afbf434c349ced4"
-    },
-    "Pictures/HM_EM05.jpeg": {
-      "checksum": "f58718d67df7176b1dc4fefc6c8001b4"
-    },
-    "Pictures/HM_RD02.jpeg": {
-      "checksum": "eee93f4e100438bcdee91123d518b988"
-    },
-    "Pictures/HM_RD03.jpeg": {
-      "checksum": "15af50fe25470e72a4fb47f9b26aa5c2"
-    },
-    "Pictures/HM_RD04.jpeg": {
-      "checksum": "f58edfb2853401882f184f5bdc7b984e"
-    },
-    "Pictures/HM_RDO1.jpeg": {
-      "checksum": "f882fdc579df3479e706c93950739d6e"
+    "Proposals/VRCC_Cost_Proposal_with_MMDA_Maps_DA_Analytics.pptx": {
+      "checksum": "1c4ff17dec1d41e601e27e07bd1ea3a5"
     },
     "renv.lock": {
       "checksum": "9578e9d750414301b5f34ebba3c24de1"
     },
     "SERVER_VRCC.R": {
-      "checksum": "5e49fef5dab33cd1c37aa43ffc23d982"
+      "checksum": "7d73e6083f5b0b36d4fcbf44335f1638"
     },
     "Test.R": {
       "checksum": "1e9313b3e04a095b05f3d59abd592966"
     },
     "UI_VRCC.R": {
-      "checksum": "a188e864d1b73151761ddb4ae236fc7a"
+      "checksum": "f4a8d5c464c8035b7c3c5c1ec070b0ee"
     },
     "Volta.R": {
       "checksum": "88395f639d18296d40a78c1497c012ba"
@@ -6046,28 +6007,19 @@
       "checksum": "9424ab6e59d71ad616320e36f623d0ed"
     },
     "VR_server.R": {
-      "checksum": "a4691ce64c03cb6a65109a3395885e50"
+      "checksum": "7d73e6083f5b0b36d4fcbf44335f1638"
     },
     "VR_ui.R": {
-      "checksum": "e3af9be24063c5d98e509aa3f90b2e6d"
+      "checksum": "79e7f703cba42bfc4c1ed97e04374bc0"
     },
     "VRCC cost Proposal.pptx": {
       "checksum": "0b4fb2036978ba9b6a5d991b429ccd22"
-    },
-    "VRCC_Cost_Proposal_DA_Analytics_Final.pdf": {
-      "checksum": "84a81c8591d306e02198ce77b3c984ee"
-    },
-    "VRCC_Cost_Proposal_DA_Analytics_Final.pptx": {
-      "checksum": "424336f6b84efcad7777f471a4bddfae"
     },
     "vrcc.csv": {
       "checksum": "d009adad720732b4b078ad95e1e1c351"
     },
     "vrcc.xlsx": {
-      "checksum": "c7dbc20d86893107cc228ea647d4082b"
-    },
-    "watermark.css": {
-      "checksum": "f8abc9a859deb051c327c221b098f46a"
+      "checksum": "9143516e0d6166a23f8e9de21980fe07"
     },
     "www/AppIcon_1024_rounded_preview.png": {
       "checksum": "793a7982360c2f33951a55aad9237fdf"

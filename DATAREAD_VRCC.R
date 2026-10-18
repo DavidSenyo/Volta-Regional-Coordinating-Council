@@ -558,3 +558,92 @@ project_types <- sort(unique(
 ))
 
 
+# ==========================================
+# VRCC AUTOMATIC LAST UPDATE DATE
+# ==========================================
+
+get_vrcc_last_update <- function() {
+  
+  # Files and folders to monitor
+  paths <- c(
+    "app.R",
+    "app_.R",
+    "UI_VRCC.R",
+    "VR_ui.R",
+    "SERVER_VRCC.R",
+    "VR_server.R",
+    "DATAREAD_VRCC.R",
+    "DataRead.R"
+  )
+  
+  # Include Excel files and project media
+  extra_files <- list.files(
+    path = ".",
+    pattern = "\\.(xlsx|xls|csv|jpg|jpeg|png|webp|mp4|mov)$",
+    recursive = TRUE,
+    full.names = TRUE,
+    ignore.case = TRUE
+  )
+  
+  paths <- unique(c(paths, extra_files))
+  
+  # Keep only existing files
+  paths <- paths[file.exists(paths)]
+  
+  if (length(paths) == 0) {
+    return("Update date unavailable")
+  }
+  
+  # Get modification dates
+  modification_times <- file.info(paths)$mtime
+  
+  modification_times <- modification_times[
+    !is.na(modification_times)
+  ]
+  
+  if (length(modification_times) == 0) {
+    return("Update date unavailable")
+  }
+  
+  latest_update <- max(modification_times)
+  
+  # Ghana local time
+  latest_update <- as.POSIXct(
+    latest_update,
+    tz = "Africa/Accra"
+  )
+  
+  # Format the date
+  weekdays <- c(
+    "Sunday", "Monday", "Tuesday",
+    "Wednesday", "Thursday",
+    "Friday", "Saturday"
+  )
+  
+  months <- c(
+    "January", "February", "March",
+    "April", "May", "June",
+    "July", "August", "September",
+    "October", "November", "December"
+  )
+  
+  day_name <- weekdays[
+    as.POSIXlt(latest_update, tz = "Africa/Accra")$wday + 1
+  ]
+  
+  month_name <- months[
+    as.POSIXlt(latest_update, tz = "Africa/Accra")$mon + 1
+  ]
+  
+  paste0(
+    day_name, ", ",
+    month_name, " ",
+    format(latest_update, "%d", tz = "Africa/Accra"),
+    ", ",
+    format(latest_update, "%Y", tz = "Africa/Accra")
+  )
+}
+
+vrcc_last_update <- get_vrcc_last_update()
+
+

@@ -15,12 +15,40 @@ ho_type_choices <- ho_type_choices[nzchar(ho_type_choices)]
 
 ui <- shinydashboard::dashboardPage(
   shinydashboard::dashboardHeader(
-    title = shiny::tags$div(
-      shiny::tags$strong("VRCC", style="font-size:20px;line-height:1.2;"),
-      shiny::tags$div("Volta Regional Coordinating Council",
-                      style="font-size:12px;font-weight:normal;opacity:0.8;")
+    
+    titleWidth = 300,
+    
+    title = tags$div(
+      
+      style = "line-height: 1.2; padding-top: 5px;",
+      
+      tags$strong(
+        "VRCC",
+        style = "font-size: 25px;"
+      ),
+      
+      tags$div(
+        paste0(
+          "Last Updated: ",
+          vrcc_last_update
+        ),
+        style = paste(
+          "font-size: 10px;",
+          "font-weight: normal;",
+          "opacity: 0.95;"
+        )
+      ),
+      
+      tags$div(
+        style = paste(
+          "font-size: 11px;",
+          "font-weight: normal;",
+          "opacity: 0.85;"
+        )
+      )
     )
   ),
+  
   shinydashboard::dashboardSidebar(
     width=300,
     shiny::conditionalPanel(
